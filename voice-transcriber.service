@@ -9,6 +9,7 @@ Environment=DISPLAY=:0
 Environment=XAUTHORITY=%h/.Xauthority
 Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 Environment=PULSE_SERVER=unix:%h/.config/pulse/native
+Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/%U/bus
 ExecStart=%h/.local/share/voice-transcriber/venv/bin/python %h/.local/share/voice-transcriber/voice_transcriber.py
 Restart=always
 RestartSec=3

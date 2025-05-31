@@ -30,8 +30,20 @@ class Config:
         return self._config['whisper']
 
     @property
+    def output(self) -> Dict[str, Any]:
+        return self._config.get('output', {
+            'type': 'auto',
+            'notify': True,
+            'typing': {
+                'delay_between_chars': 0.01,
+                'add_trailing_space': True,
+                'retry_count': 3
+            }
+        })
+
+    @property
     def typing(self) -> Dict[str, Any]:
-        return self._config['typing']
+        return self.output['typing']
 
     def reload(self):
         """Reload configuration from file"""

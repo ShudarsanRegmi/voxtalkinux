@@ -1,0 +1,11 @@
+[0;1;32m●[0m voice-transcriber.service - Voice Transcriber Service
+     Loaded: loaded (/home/aparichit/.config/systemd/user/voice-transcriber.service; enabled; vendor preset: enabled)
+     Active: [0;1;32mactive (running)[0m since Sat 2025-05-31 10:31:55 IST; 8ms ago
+   Main PID: 260368 (python)
+      Tasks: 1 (limit: 18937)
+     Memory: 2.5M
+        CPU: 6ms
+     CGroup: /user.slice/user-1000.slice/user@1000.service/app.slice/voice-transcriber.service
+             └─260368 /home/aparichit/.local/share/voice-transcriber/venv/bin/python /home/aparichit/.local/share/voice-transcriber/voice_transcriber.py
+
+May 31 10:31:55 SUSHANKYA systemd[4402]: Started Voice Transcriber Service.

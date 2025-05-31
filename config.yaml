@@ -22,4 +22,4 @@ output:
   typing:
     delay_between_chars: 0.01  # seconds between each character typed
     add_trailing_space: true  # whether to add a space after the transcription
-    retry_count: 3  # number of times to retry typing if it fails 
+    retry_count: 3  # number of typing attempts before falling back to clipboard 
