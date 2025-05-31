@@ -1,0 +1,21 @@
+# Hotkey configuration
+hotkey:
+  modifiers: ['ctrl', 'alt']
+  key: 'space'
+
+# Audio recording settings
+audio:
+  sample_rate: 16000
+  channels: 1
+  timeout: 5.0  # seconds of silence before stopping recording
+  silence_threshold: 0.03  # threshold for detecting silence
+
+# Whisper model configuration
+whisper:
+  model_size: 'tiny'  # options: tiny, base, small, medium, large
+  language: 'en'  # default language (auto-detect if null)
+  
+# Typing configuration
+typing:
+  delay_between_chars: 0.01  # seconds between each character typed
+  add_trailing_space: true  # whether to add a space after the transcription 
