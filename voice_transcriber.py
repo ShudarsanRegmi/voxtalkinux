@@ -8,14 +8,14 @@ from pynput import keyboard
 from config_loader import Config
 from audio_recorder import AudioRecorder
 from transcriber import Transcriber
-from text_typer import TextTyper
+from output_handler import OutputHandler
 
 class VoiceTranscriber:
     def __init__(self):
         self.config = Config()
         self.recorder = AudioRecorder()
         self.transcriber = Transcriber()
-        self.typer = TextTyper()
+        self.output_handler = OutputHandler()
         self.is_recording = False
         self._setup_hotkey()
 
@@ -58,8 +58,8 @@ class VoiceTranscriber:
                 text = self.transcriber.transcribe(audio_file)
                 print(f"Transcribed text: {text}")
                 
-                print("Typing text...")
-                self.typer.type_text(text)
+                print("Processing output...")
+                self.output_handler.output_text(text)
                 
                 # Clean up temporary audio file
                 try:
