@@ -75,7 +75,8 @@ class OutputHandler:
         if output_type in ['type', 'auto']:
             success = self._try_typing(text)
             if success:
-                message = "Text typed successfully"
+                # Skip notification for successful typing
+                return True
             elif output_type == 'auto':
                 # Fall back to clipboard
                 success = self._copy_to_clipboard(text)
