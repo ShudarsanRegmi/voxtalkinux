@@ -12,7 +12,7 @@ audio:
 
 # Whisper model configuration
 whisper:
-  model_size: 'tiny'  # options: tiny, base, small, medium, large
+  model_size: 'base'  # options: tiny, base, small, medium, large
   language: 'en'  # default language (auto-detect if null)
   
 # Output configuration
