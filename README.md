@@ -1,125 +1,114 @@
-# Voice Transcriber
+# VoxTalkLinux
 
-A lightweight, offline voice transcription tool for Ubuntu that runs in the background and transcribes speech to text using OpenAI's Whisper model.
+VoxTalkLinux is a voice transcription tool for Linux that allows you to transcribe speech to text in real-time and automatically type or copy the transcribed text. It features a sleek visualization window that provides visual feedback during recording.
 
 ## Features
 
-- Global hotkey activation (default: Ctrl + Alt + Space)
-- Local offline transcription using Whisper
-- Automatic text input after transcription
-- Configurable settings (hotkey, model size, audio parameters)
-- Runs as a background service
-- Completely offline - no cloud APIs required
+- 🎙️ Real-time voice transcription
+- ⌨️ Automatic typing of transcribed text
+- 📋 Clipboard support as fallback
+- 🎯 Global hotkey support (default: Ctrl+Alt+Space)
+- 📊 Visual feedback with animated waveform
+- 🔧 Configurable settings
+- 🎨 Modern, minimalist UI
 
 ## Requirements
 
+- Linux operating system
 - Python 3.8 or higher
-- Ubuntu Linux (or other Linux distributions)
 - PortAudio (for audio recording)
-- FFmpeg (for audio processing)
+- X11 environment
+- notify-send (for notifications)
 
 ## Installation
 
-1. Install system dependencies:
+1. Clone the repository:
 ```bash
-sudo apt-get update
-sudo apt-get install python3-pip python3-venv portaudio19-dev ffmpeg
+git clone https://github.com/yourusername/voxtalkinux.git
+cd voxtalkinux
 ```
 
-2. Clone the repository and set up a virtual environment:
+2. Run the installation script:
 ```bash
-git clone <repository-url>
-cd voice-transcriber
-python3 -m venv venv
-source venv/bin/activate
+chmod +x install.sh
+./install.sh
 ```
 
-3. Install Python dependencies:
-```bash
-pip install -r requirements.txt
-```
+The installation script will:
+- Create a virtual environment
+- Install required Python packages
+- Set up necessary system dependencies
+- Configure the application
+- Register and enable the service to start automatically on system boot
 
 ## Usage
 
-1. Activate the virtual environment if not already active:
-```bash
-source venv/bin/activate
-```
+The application runs automatically as a background service after installation and system restart. You don't need to manually start it.
 
-2. Run the transcriber:
-```bash
-python voice_transcriber.py
-```
+1. Press `Ctrl+Space` to start recording (default hotkey)
+2. Speak clearly into your microphone
+3. Press `Ctrl+Space` again to stop recording
+4. The transcribed text will be automatically typed or copied to clipboard
 
-3. Use the hotkey (default: Ctrl + Alt + Space) to start/stop recording. The transcribed text will be automatically typed at your cursor position.
+To check the service status, you can use:
+```bash
+systemctl --user status voxtalkinux
+```
 
 ## Configuration
 
-Edit `config.yaml` to customize:
+The configuration file is located at `~/.config/voxtalkinux/config.yaml`. You can customize:
 
-- Hotkey combination
-- Whisper model size (tiny, base, small, medium, large)
-- Audio recording parameters
-- Typing behavior
+- Hotkey combinations
+- Output method (type/clipboard/auto)
+- Typing speed and behavior
+- Notification preferences
+- Audio settings
 
 Example configuration:
 ```yaml
 hotkey:
-  modifiers: ['ctrl', 'alt']
+  modifiers: ['ctrl', 'alt'] # modifiers: ['ctrl'] if you want ctrl + space
   key: 'space'
 
 whisper:
-  model_size: 'tiny'  # Change to 'base', 'small', 'medium', or 'large' for better accuracy
-```
+  model_size: 'base'  # options: tiny, base, small, medium, large
 
-## Running as a System Service
-
-To run the transcriber as a system service on startup:
-
-1. Create a systemd service file:
-```bash
-sudo nano /etc/systemd/system/voice-transcriber.service
-```
-
-2. Add the following content (adjust paths as needed):
-```ini
-[Unit]
-Description=Voice Transcriber Service
-After=network.target
-
-[Service]
-Type=simple
-User=YOUR_USERNAME
-Environment=DISPLAY=:0
-Environment=XAUTHORITY=/home/YOUR_USERNAME/.Xauthority
-WorkingDirectory=/path/to/voice-transcriber
-ExecStart=/path/to/voice-transcriber/venv/bin/python voice_transcriber.py
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-```
-
-3. Enable and start the service:
-```bash
-sudo systemctl enable voice-transcriber
-sudo systemctl start voice-transcriber
+output:
+  type: 'auto'  # 'type', 'clipboard', or 'auto'
+  notify: true
+  typing:
+    delay_between_chars: 0.001
+    add_trailing_space: true
+    retry_count: 3
 ```
 
 ## Troubleshooting
 
-1. If you get PortAudio errors:
-   - Ensure portaudio19-dev is installed
-   - Check your microphone permissions
+1. **No audio input detected**
+   - Check if your microphone is properly connected
+   - Verify microphone permissions
+   - Run `pavucontrol` to check audio levels
 
-2. If the hotkey doesn't work:
-   - Ensure no other application is using the same hotkey
-   - Try running with sudo for global hotkey access
+2. **Typing not working**
+   - Ensure you have proper accessibility permissions
+   - Try increasing the `delay_between_chars` in config
+   - Switch to clipboard mode temporarily
 
-3. If transcription is slow:
-   - Consider using a smaller Whisper model
-   - Ensure you have sufficient CPU power
+3. **Notifications not showing**
+   - Verify `notify-send` is installed
+   - Check if your desktop environment supports notifications
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-MIT License 
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- OpenAI Whisper for speech recognition
+- The Python community for excellent libraries
+- Contributors and users for feedback and suggestions 
