@@ -10,6 +10,9 @@ from config_loader import Config
 from audio_recorder import AudioRecorder
 from transcriber import Transcriber
 from output_handler import OutputHandler
+from visualization import RecordingVisualizer
+import threading
+import time
 
 class VoiceTranscriber:
     def __init__(self):
@@ -18,7 +21,9 @@ class VoiceTranscriber:
         self.recorder = AudioRecorder()
         self.transcriber = Transcriber()
         self.output_handler = OutputHandler()
+        self.visualizer = RecordingVisualizer()
         self.is_recording = False
+        self.running = True
         print("Loading configuration...")  # Debug
         print(f"Hotkey config: {self.config.hotkey}")  # Debug
         self._setup_hotkey()
@@ -89,11 +94,13 @@ class VoiceTranscriber:
             print("Starting recording...")
             self._show_notification("Recording Started", "Speak now...")
             self.recorder.start_recording()
+            self.visualizer.show()  # Show visualization window
             self.is_recording = True
         else:
             print("Stopping recording...")
             self._show_notification("Recording Stopped", "Processing your speech...")
             audio_file = self.recorder.stop_recording()
+            self.visualizer.hide()  # Hide visualization window
             self.is_recording = False
             
             if audio_file:
@@ -118,6 +125,7 @@ class VoiceTranscriber:
         # Handle graceful shutdown
         def signal_handler(signum, frame):
             print("\nShutting down...")
+            self.running = False
             if self.is_recording:
                 self.recorder.stop_recording()
             self.listener.stop()
@@ -127,11 +135,21 @@ class VoiceTranscriber:
         signal.signal(signal.SIGINT, signal_handler)
         signal.signal(signal.SIGTERM, signal_handler)
         
-        # Start the hotkey listener
-        print("Starting keyboard listener...")  # Debug
+        # Start the hotkey listener in a separate thread
         self.listener.start()
-        print("Keyboard listener started, waiting for hotkey...")  # Debug
-        self.listener.join()
+        
+        # Main event loop - process visualization commands and update GUI
+        try:
+            while self.running:
+                # Process any pending visualization commands
+                self.visualizer.process_commands()
+                # Small sleep to prevent high CPU usage
+                time.sleep(0.01)
+        except KeyboardInterrupt:
+            signal_handler(None, None)
+        finally:
+            self.listener.stop()
+            self.listener.join()
 
 if __name__ == "__main__":
     transcriber = VoiceTranscriber()

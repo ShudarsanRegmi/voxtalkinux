@@ -6,4 +6,5 @@ PyYAML>=6.0.1
 python-xlib>=0.33
 pyautogui>=0.9.54
 scipy>=1.11.0
-pyperclip>=1.8.2 
+pyperclip>=1.8.2
+Pillow>=10.0.0 
