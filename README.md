@@ -1,6 +1,6 @@
-# VoxTalkLinux
+# VoxTalkinux
 
-VoxTalkLinux is a voice transcription tool for Linux that allows you to transcribe speech to text in real-time and automatically type or copy the transcribed text. It features a sleek visualization window that provides visual feedback during recording.
+VoxTalkinux is a voice transcription tool for Linux that allows you to transcribe speech to text in real-time and automatically type or copy the transcribed text. It features a sleek visualization window that provides visual feedback during recording.
 
 ## Features
 
