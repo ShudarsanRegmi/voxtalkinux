@@ -27,12 +27,12 @@ class VoiceTranscriber:
         print("Loading configuration...")  # Debug
         print(f"Hotkey config: {self.config.hotkey}")  # Debug
         self._setup_hotkey()
-        # Show startup notification
+        # Show startup notification only for initial launch
         self._show_notification("Voice Transcriber Started", "Press Ctrl+Alt+Space to start/stop recording")
         print("Initialization complete!")  # Debug
 
     def _show_notification(self, title: str, message: str):
-        """Show a desktop notification"""
+        """Show a desktop notification - only used for startup/shutdown"""
         try:
             subprocess.run([
                 'notify-send',
@@ -92,30 +92,35 @@ class VoiceTranscriber:
         """Toggle recording state"""
         if not self.is_recording:
             print("Starting recording...")
-            self._show_notification("Recording Started", "Speak now...")
-            self.recorder.start_recording()
             self.visualizer.show()  # Show visualization window
+            self.visualizer.set_message("Speak now...")
+            self.recorder.start_recording()
             self.is_recording = True
         else:
             print("Stopping recording...")
-            self._show_notification("Recording Stopped", "Processing your speech...")
+            self.visualizer.set_message("Processing speech...")
             audio_file = self.recorder.stop_recording()
-            self.visualizer.hide()  # Hide visualization window
             self.is_recording = False
             
             if audio_file:
                 print("Transcribing...")
+                self.visualizer.set_message("Transcribing...")
                 text = self.transcriber.transcribe(audio_file)
                 print(f"Transcribed text: {text}")
                 
                 print("Processing output...")
-                self.output_handler.output_text(text)
+                self.visualizer.set_message("Typing text...")
+                success = self.output_handler.output_text(text)
                 
                 # Clean up temporary audio file
                 try:
                     Path(audio_file).unlink()
                 except Exception as e:
                     print(f"Warning: Could not delete temporary file: {e}")
+                
+                # Hide visualization after a short delay
+                time.sleep(0.5)
+                self.visualizer.hide()
 
     def run(self):
         """Start the voice transcriber service"""

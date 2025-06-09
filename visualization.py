@@ -19,6 +19,7 @@ class RecordingVisualizer:
         self.mic_photo = None
         self.command_queue = queue.Queue()
         self.audio_data = queue.Queue(maxsize=10)
+        self.message = ""
 
         self.WAVE_WIDTH = 120
         self.WAVE_HEIGHT = 40
@@ -122,6 +123,10 @@ class RecordingVisualizer:
     def hide(self):
         self.command_queue.put(('hide', None))
 
+    def set_message(self, message):
+        """Queue a message update to be executed in main thread"""
+        self.command_queue.put(('message', message))
+
     def _show_window(self):
         if self.window is None:
             self.window = tk.Toplevel(self.root)
@@ -129,7 +134,7 @@ class RecordingVisualizer:
             self.window.overrideredirect(True)
             self.window.attributes('-topmost', True)
             window_width = 250
-            window_height = 100
+            window_height = 120  # Increased height for message
             x, y = 10, 10
             self.window.geometry(f"{window_width}x{window_height}+{x}+{y}")
             self.window.attributes('-alpha', 0.95)
@@ -149,7 +154,17 @@ class RecordingVisualizer:
                 fill='#34495e', outline='#3498db', width=2
             )
 
-            self.canvas.create_image(30, window_height // 2, anchor='center', image=self.mic_photo)
+            # Add message text at the bottom
+            self.message_id = self.canvas.create_text(
+                window_width//2, window_height-15,
+                text=self.message,
+                fill='#bdc3c7',
+                font=('Arial', 9),
+                anchor='s',
+                width=window_width-20  # Allow text wrapping
+            )
+
+            self.canvas.create_image(30, window_height//2 - 10, anchor='center', image=self.mic_photo)
             self._init_waveform()
             self._setup_audio_stream()
             self.is_recording = True
@@ -225,6 +240,12 @@ class RecordingVisualizer:
         b = int(b * alpha + bg_b * (1 - alpha))
         return f'#{r:02x}{g:02x}{b:02x}'
 
+    def _update_message(self, message):
+        """Update the message text in the window"""
+        self.message = message
+        if self.window and hasattr(self, 'message_id'):
+            self.canvas.itemconfig(self.message_id, text=message)
+
     def process_commands(self):
         try:
             while True:
@@ -233,6 +254,8 @@ class RecordingVisualizer:
                     self._show_window()
                 elif command == 'hide':
                     self._hide_window()
+                elif command == 'message':
+                    self._update_message(args)
         except queue.Empty:
             pass
 
