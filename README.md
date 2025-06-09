@@ -4,8 +4,6 @@ VoxTalkinux is a voice transcription tool for Linux that allows you to transcrib
 
 ## Demo
 
-https://github.com/yourusername/voxtalkinux/assets/demo/demo.mp4
-
 ![Demo Video](./demo/demo.mp4)
 
 ## Features
