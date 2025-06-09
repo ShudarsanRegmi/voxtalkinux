@@ -1,6 +1,6 @@
 # Hotkey configuration
 hotkey:
-  modifiers: ['ctrl', 'alt']
+  modifiers: ['ctrl']
   key: 'space'
 
 # Audio recording settings
