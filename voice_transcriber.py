@@ -65,10 +65,10 @@ class VoiceTranscriber:
         self.current_keys = set()
         
         def on_press(k):
-            print(f"Key pressed: {k}")  # Debug
+            # print(f"Key pressed: {k}")  # Debug
             self.current_keys.add(k)
-            print(f"Current keys held: {self.current_keys}")  # Debug
-            print(f"Looking for modifiers: {modifiers} and key: {key}")  # Debug
+            # print(f"Current keys held: {self.current_keys}")  # Debug
+            # print(f"Looking for modifiers: {modifiers} and key: {key}")  # Debug
             if all(m in self.current_keys for m in modifiers) and key in self.current_keys:
                 print("Hotkey combination detected!")  # Debug
                 self.toggle_recording()
@@ -76,8 +76,8 @@ class VoiceTranscriber:
         def on_release(k):
             try:
                 self.current_keys.remove(k)
-                print(f"Key released: {k}")  # Debug
-                print(f"Current keys held: {self.current_keys}")  # Debug
+                # print(f"Key released: {k}")  # Debug
+                # print(f"Current keys held: {self.current_keys}")  # Debug
             except KeyError:
                 pass
 
